@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>|</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- |1| -->
+  <div class="block" id="block1">
+    <div>|1|</div>
+    <input type="text" id="block1input" placeholder="begin" />
+    <button id="slashButton1" class="slash-button" style="display: none;">|</button>
+  </div>
+
+  <!-- |2| -->
+  <div class="block" id="block2">
+    <div>|2|</div>
+    <input type="range" id="block2slider" min="0" max="100" value="0" />
+    <div class="label-row">
+      <span>0</span><span>|</span>
+    </div>
+    <button id="slashButton2" class="slash-button" style="display: none;">|</button>
+  </div>
+
+  <!-- |3| -->
+  <div class="block" id="block3">
+    <div>|3|</div>
+    <select id="block3select">
+      <option value=""></option>
+      <option value="|">|</option>
+      <option value="\">\</option>
+      <option value="*">*</option>
+    </select>
+  </div>
+
+  <!-- |4| -->
+  <div class="block" id="block4">
+    <div>|4|</div>
+    <div>This is an old <a href="#" id="storyLink" style="text-decoration: none; color: inherit; cursor: pointer;">story</a>.</div>
+  </div>
+
+  <!-- |5| -->
+  <div class="block" id="block5">
+    <div>|5|</div>
+    <div class="block5-container">
+      <div class="block5-input-row">
+        <span>a system</span>
+        <input type="text" id="block5input" placeholder="..." />
+      </div>
+      <button class="trust-button" id="trustButton" style="display: none;">trust</button>
+    </div>
+  </div>
+
+  <!-- |6| -->
+  <div class="block" id="block6">
+    <div>|6|</div>
+    <div class="checkbox-grid">
+      <div class="checkbox-cell"><input type="checkbox" id="check1" data-pos="1"></div>
+      <div class="checkbox-cell"><input type="checkbox" id="check2" data-pos="2"></div>
+      <div class="checkbox-cell"><input type="checkbox" id="check3" data-pos="3"></div>
+      <div class="checkbox-cell"><input type="checkbox" id="check4" data-pos="4"></div>
+      <div class="checkbox-cell"><input type="checkbox" id="check5" data-pos="5"></div>
+      <div class="checkbox-cell"><input type="checkbox" id="check6" data-pos="6"></div>
+      <div class="checkbox-cell"><input type="checkbox" id="check7" data-pos="7"></div>
+      <div class="checkbox-cell"><input type="checkbox" id="check8" data-pos="8"></div>
+      <div class="checkbox-cell"><input type="checkbox" id="check9" data-pos="9"></div>
+    </div>
+    <button id="attentionButton" style="display: none;">attention</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
