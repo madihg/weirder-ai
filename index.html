@@ -749,6 +749,7 @@
         // Add click handler for the title button
         document.querySelector('.title-button').addEventListener('click', function(e) {
             e.stopPropagation(); // Prevent title click event
+            
             // Calculate screen dimensions
             const screenW = window.screen.width;
             const screenH = window.screen.height;
@@ -760,6 +761,15 @@
             // Open future-with-me.glitch.me
             window.open('https://future-with-me.glitch.me/', '_blank', 
                 `width=${winWidth},height=${winHeight},left=${left},top=${top},resizable=no`);
+            
+            // Open introductions image in a popup on the left
+            const imgWidth = 600; // Width for the image popup
+            const imgHeight = 800; // Height for the image popup
+            const imgLeft = 0; // Position on far left
+            const imgTop = Math.floor((screenH - imgHeight) / 2); // Center vertically
+            
+            window.open('assets/introductions.jpg', '_blank',
+                `width=${imgWidth},height=${imgHeight},left=${imgLeft},top=${imgTop},resizable=yes`);
         });
     </script>
 </body>
