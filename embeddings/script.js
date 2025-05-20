@@ -312,7 +312,7 @@ function sketch2(p) {
           contentDiv.style('height', 'auto');
           contentDiv.style('display', 'block');
         } else if (content.type === 'link') {
-          contentDiv = p.createA(content.content, 'Open Link', '_blank');
+          contentDiv = p.createA(content.content, 'Open', '_blank');
           contentDiv.style('display', 'block');
           contentDiv.style('text-align', 'center');
           contentDiv.style('margin-top', `${20 * scaleFactor}px`);
