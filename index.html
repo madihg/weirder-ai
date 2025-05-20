@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future v.</title>
+    <style>
+        /* SeedPhrase Project Styles */
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Times New Roman", Times, serif;
+            letter-spacing: -0.03em;
+            background-color: white;
+        }
+        
+        body {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+        }
+        
+        /* Headings */
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: normal;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: gap 1s ease-in-out;
+        }
+        
+        h1 .seed {
+            font-weight: bold;
+        }
+        
+        h1 .phr {
+            font-style: italic;
+            font-weight: normal;
+        }
+        
+        h1 .title-button {
+            display: none;
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 50%;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 24px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        h1 .title-button::before {
+            content: "↓";
+        }
+        
+        h1 .title-button.visible {
+            opacity: 1;
+        }
+        
+        /* Images */
+        img {
+            border: 1px solid black;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Container for the three rectangles */
+        .rectangle-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100vw;
+            height: 80vh;
+            max-width: none;
+            margin: 0;
+            position: relative;
+        }
+        
+        /* Rectangle styles */
+        .rectangle {
+            width: 30%;
+            min-width: 200px;
+            aspect-ratio: 16/9;
+            min-height: 120px;
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: grab;
+            position: relative;
+            overflow: hidden;
+            font-size: 24px;
+            user-select: none;
+            transition: transform 0.1s, box-shadow 0.1s;
+            background-color: transparent;
+        }
+        
+        .rectangle.dragging {
+            cursor: grabbing;
+            transform: scale(1.02) translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+        
+        /* Pattern Styles */
+        .pattern-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            font-family: monospace;
+            font-size: 16px;
+            line-height: 16px;
+            padding: 4px;
+            user-select: none;
+            background-color: transparent;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .pattern-line {
+            white-space: nowrap;
+            overflow: hidden;
+            animation: marquee 10s linear infinite;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        /* Button that appears on click */
+        .arrow-button {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 24px;
+        }
+        
+        .arrow-button::before {
+            content: "/";
+        }
+        
+        #button3.arrow-button::before {
+            content: "|";
+        }
+        
+        /* Backslash button style */
+        .backslash-button {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 24px;
+        }
+        
+        /* Media queries for responsive design */
+        @media (max-width: 768px) {
+            .rectangle-container {
+                flex-direction: column;
+                align-items: center;
+                height: 100vh;
+                gap: 20px;
+            }
+            
+            .rectangle {
+                width: 80%;
+            }
+        }
+        
+        /* Additional styles for fade effect */
+        .fading {
+            transition: opacity 0.8s ease-out;
+        }
+        
+        #merged-rectangle {
+            border: 1px solid black;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            overflow: hidden;
+            font-size: 24px;
+            user-select: none;
+            background-color: transparent;
+            opacity: 0;
+            transition: opacity 0.8s ease-in;
+        }
+        
+        #star-pattern {
+            color: black;
+            font-family: monospace;
+            font-size: 16px;
+            line-height: 16px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        /* Add star button styles */
+        .star-button {
+            position: absolute;
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 24px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        <span class="seed">future</span>
+        <div class="title-button"></div>
+        <span class="phr">v.</span>
+    </h1>
+    
+    <div class="rectangle-container" id="rectangle-container">
+        <div class="rectangle" id="rectangle1">
+            <div class="pattern-container" id="backslash-pattern"></div>
+            <button class="backslash-button" id="button1">\</button>
+        </div>
+        
+        <div class="rectangle" id="rectangle2">
+            <div class="pattern-container" id="slash-pattern"></div>
+            <button class="arrow-button" id="button2"></button>
+        </div>
+        
+        <div class="rectangle" id="rectangle3">
+            <div class="pattern-container" id="dash-pattern"></div>
+            <button class="arrow-button" id="button3"></button>
+        </div>
+        
+        <div id="merged-rectangle">
+            <div class="pattern-container" id="star-pattern"></div>
+        </div>
+    </div>
+
+    <script>
+        // Fill rectangles with characters
+        function fillWithCharacters() {
+            // Fill the first rectangle with backslashes
+            const backslashPattern = document.getElementById('backslash-pattern');
+            backslashPattern.innerHTML = '';
+            backslashPattern.style.whiteSpace = 'pre-wrap';
+            backslashPattern.style.wordBreak = 'break-all';
+            backslashPattern.style.fontFamily = 'monospace';
+            backslashPattern.style.fontSize = '16px';
+            backslashPattern.style.lineHeight = '16px';
+            
+            const width1 = backslashPattern.offsetWidth;
+            const height1 = backslashPattern.offsetHeight;
+            const charWidth = 9.6;
+            const lineHeight = 16;
+            
+            const charsPerLine1 = Math.floor((width1 - 8) / charWidth);
+            const numLines1 = Math.floor((height1 - 8) / lineHeight);
+            
+            let content1 = '';
+            for (let i = 0; i < numLines1; i++) {
+                for (let j = 0; j < charsPerLine1; j++) {
+                    content1 += '\\';
+                }
+                if (i < numLines1 - 1) {
+                    content1 += '\n';
+                }
+            }
+            backslashPattern.textContent = content1;
+            
+            // Fill the second rectangle with slashes
+            const slashPattern = document.getElementById('slash-pattern');
+            slashPattern.innerHTML = '';
+            slashPattern.style.whiteSpace = 'pre-wrap';
+            slashPattern.style.wordBreak = 'break-all';
+            slashPattern.style.fontFamily = 'monospace';
+            slashPattern.style.fontSize = '16px';
+            slashPattern.style.lineHeight = '16px';
+            
+            const width2 = slashPattern.offsetWidth;
+            const height2 = slashPattern.offsetHeight;
+            
+            const charsPerLine2 = Math.floor((width2 - 8) / charWidth);
+            const numLines2 = Math.floor((height2 - 8) / lineHeight);
+            
+            let content2 = '';
+            for (let i = 0; i < numLines2; i++) {
+                for (let j = 0; j < charsPerLine2; j++) {
+                    content2 += '/';
+                }
+                if (i < numLines2 - 1) {
+                    content2 += '\n';
+                }
+            }
+            slashPattern.textContent = content2;
+            
+            // Fill the third rectangle with pipes
+            const dashPattern = document.getElementById('dash-pattern');
+            dashPattern.innerHTML = '';
+            dashPattern.style.whiteSpace = 'pre-wrap';
+            dashPattern.style.wordBreak = 'break-all';
+            dashPattern.style.fontFamily = 'monospace';
+            dashPattern.style.fontSize = '16px';
+            dashPattern.style.lineHeight = '16px';
+            
+            const width3 = dashPattern.offsetWidth;
+            const height3 = dashPattern.offsetHeight;
+            
+            const charsPerLine3 = Math.floor((width3 - 8) / charWidth);
+            const numLines3 = Math.floor((height3 - 8) / lineHeight);
+            
+            let content3 = '';
+            for (let i = 0; i < numLines3; i++) {
+                for (let j = 0; j < charsPerLine3; j++) {
+                    content3 += '|';
+                }
+                if (i < numLines3 - 1) {
+                    content3 += '\n';
+                }
+            }
+            dashPattern.textContent = content3;
+        }
+        
+        // Fill merged rectangle with asterisks
+        function fillMergedRectangle() {
+            const starPattern = document.getElementById('star-pattern');
+            starPattern.innerHTML = '';
+            starPattern.style.whiteSpace = 'pre-wrap';
+            starPattern.style.wordBreak = 'break-all';
+            starPattern.style.fontFamily = 'monospace';
+            starPattern.style.fontSize = '16px';
+            starPattern.style.lineHeight = '16px';
+            
+            const rect = starPattern.getBoundingClientRect();
+            const width = starPattern.offsetWidth;
+            const height = starPattern.offsetHeight;
+            
+            // Calculate based on font metrics
+            const charWidth = 9.6; // Approximate for monospace 16px
+            const lineHeight = 16;
+            
+            const charsPerLine = Math.floor((width - 8) / charWidth); // Subtract padding
+            const numLines = Math.floor((height - 8) / lineHeight); // Subtract padding
+            
+            let content = '';
+            for (let i = 0; i < numLines; i++) {
+                for (let j = 0; j < charsPerLine; j++) {
+                    content += '*';
+                }
+                if (i < numLines - 1) {
+                    content += '\n';
+                }
+            }
+            
+            starPattern.textContent = content;
+        }
+        
+        // Check if rectangles overlap almost perfectly
+        function checkPerfectOverlap() {
+            const rect1 = document.getElementById('rectangle1').getBoundingClientRect();
+            const rect2 = document.getElementById('rectangle2').getBoundingClientRect();
+            const rect3 = document.getElementById('rectangle3').getBoundingClientRect();
+            
+            // Define tolerance for "almost perfect" overlap (in pixels)
+            const tolerance = 20;
+            
+            // Check if all rectangles are within tolerance of each other
+            const rect1CenterX = rect1.left + rect1.width / 2;
+            const rect1CenterY = rect1.top + rect1.height / 2;
+            const rect2CenterX = rect2.left + rect2.width / 2;
+            const rect2CenterY = rect2.top + rect2.height / 2;
+            const rect3CenterX = rect3.left + rect3.width / 2;
+            const rect3CenterY = rect3.top + rect3.height / 2;
+            
+            // Check if all centers are close enough
+            const distanceX12 = Math.abs(rect1CenterX - rect2CenterX);
+            const distanceY12 = Math.abs(rect1CenterY - rect2CenterY);
+            const distanceX13 = Math.abs(rect1CenterX - rect3CenterX);
+            const distanceY13 = Math.abs(rect1CenterY - rect3CenterY);
+            const distanceX23 = Math.abs(rect2CenterX - rect3CenterX);
+            const distanceY23 = Math.abs(rect2CenterY - rect3CenterY);
+            
+            return (distanceX12 < tolerance && distanceY12 < tolerance &&
+                    distanceX13 < tolerance && distanceY13 < tolerance &&
+                    distanceX23 < tolerance && distanceY23 < tolerance);
+        }
+        
+        // Merge rectangles
+        function mergeRectangles() {
+            const rect1 = document.getElementById('rectangle1');
+            const rect2 = document.getElementById('rectangle2');
+            const rect3 = document.getElementById('rectangle3');
+            
+            // Calculate center position
+            const containerRect = document.getElementById('rectangle-container').getBoundingClientRect();
+            const mergedRect = document.getElementById('merged-rectangle');
+            
+            // Get the computed styles of rect1 to match exactly
+            const rect1Styles = window.getComputedStyle(rect1);
+            const rect1Bounds = rect1.getBoundingClientRect();
+            
+            // Set the same size as the original rectangles
+            mergedRect.style.width = rect1Styles.width;
+            mergedRect.style.height = rect1Styles.height;
+            mergedRect.style.minWidth = rect1Styles.minWidth;
+            mergedRect.style.minHeight = rect1Styles.minHeight;
+            
+            // Copy position from rect1
+            if (rect1.style.position === 'absolute') {
+                mergedRect.style.left = rect1.style.left;
+                mergedRect.style.top = rect1.style.top;
+            } else {
+                // If rect1 isn't positioned absolutely yet, calculate position
+                mergedRect.style.left = (rect1Bounds.left - containerRect.left) + 'px';
+                mergedRect.style.top = (rect1Bounds.top - containerRect.top) + 'px';
+            }
+            
+            // Add fading class for smooth transition
+            rect1.classList.add('fading');
+            rect2.classList.add('fading');
+            rect3.classList.add('fading');
+            
+            // Start fade out
+            rect1.style.opacity = '0';
+            rect2.style.opacity = '0';
+            rect3.style.opacity = '0';
+            
+            // Show merged rectangle after a short delay
+            setTimeout(() => {
+                mergedRect.style.display = 'flex';
+                // Fill with asterisks before showing
+                fillMergedRectangle();
+                
+                // Add star button
+                const starButton = document.createElement('button');
+                starButton.className = 'star-button';
+                starButton.textContent = '*';
+                starButton.style.display = 'none';
+                mergedRect.appendChild(starButton);
+                
+                // Add click handler for the star button
+                starButton.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent rectangle click event
+                    
+                    // Calculate screen dimensions
+                    const screenW = window.screen.width;
+                    const screenH = window.screen.height;
+                    const winWidth = 800; // Large width
+                    const winHeight = 600; // Large height
+                    const left = Math.floor((screenW - winWidth) / 2); // Center horizontally
+                    const top = Math.floor((screenH - winHeight) / 2); // Center vertically
+                    
+                    // Open psy-grey.html in a centered window
+                    window.open('psy-grey.html', '_blank', 
+                        `width=${winWidth},height=${winHeight},left=${left},top=${top},resizable=yes`);
+                });
+                
+                setTimeout(() => {
+                    mergedRect.style.opacity = '1';
+                    starButton.style.display = 'flex';
+                }, 50);
+            }, 400);
+            
+            // Hide original rectangles completely after fade
+            setTimeout(() => {
+                rect1.style.display = 'none';
+                rect2.style.display = 'none';
+                rect3.style.display = 'none';
+            }, 800);
+        }
+        
+        // Initial fill and refill on window resize
+        function initializeFills() {
+            fillWithCharacters();
+            // Call multiple times to ensure proper rendering
+            setTimeout(fillWithCharacters, 100);
+            setTimeout(fillWithCharacters, 500);
+        }
+        
+        window.addEventListener('load', initializeFills);
+        window.addEventListener('resize', fillWithCharacters);
+        
+        // Also fill immediately when script runs
+        document.addEventListener('DOMContentLoaded', initializeFills);
+        
+        // Enhanced drag functionality
+        const rectangles = document.querySelectorAll('.rectangle');
+        const container = document.getElementById('rectangle-container');
+        
+        // Track which rectangle is being dragged and its initial position
+        let activeDragElement = null;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+        let offsetX = 0;
+        let offsetY = 0;
+        let initialPositions = [];
+        let mergeExecuted = false; // Prevent multiple merge executions
+        
+        // Store initial positions when page loads
+        window.addEventListener('load', function() {
+            rectangles.forEach(rect => {
+                const position = rect.getBoundingClientRect();
+                initialPositions.push({
+                    id: rect.id,
+                    left: position.left,
+                    top: position.top
+                });
+            });
+        });
+        
+        // Handle mouse events for dragging
+        rectangles.forEach(rectangle => {
+            // Mouse down - start dragging
+            rectangle.addEventListener('mousedown', function(e) {
+                if (e.target.classList.contains('arrow-button')) return;
+                
+                // Set this as the active drag element
+                activeDragElement = this;
+                isDragging = true;
+                
+                // Get current position
+                const rect = this.getBoundingClientRect();
+                
+                // Calculate offset from mouse position to rectangle corner
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                
+                // Record start position
+                startX = e.clientX - offsetX;
+                startY = e.clientY - offsetY;
+                
+                // Set visual dragging state
+                this.classList.add('dragging');
+                
+                // Prevent default behavior
+                e.preventDefault();
+            });
+            
+            // Click event to show button only
+            rectangle.addEventListener('click', function(e) {
+                if (!isDragging && !e.target.classList.contains('arrow-button') && !e.target.classList.contains('backslash-button')) {
+                    // Get the button inside this rectangle
+                    const button = this.querySelector('.arrow-button, .backslash-button');
+                    if (button) {
+                        button.style.display = 'flex';
+                    }
+                }
+            });
+        });
+        
+        // Mouse move - move the rectangle
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging || !activeDragElement) return;
+            
+            // Calculate new position
+            const newX = e.clientX - offsetX;
+            const newY = e.clientY - offsetY;
+            
+            // Get container bounds
+            const containerRect = container.getBoundingClientRect();
+            
+            // Keep rectangle within container bounds
+            const rectWidth = activeDragElement.offsetWidth;
+            const rectHeight = activeDragElement.offsetHeight;
+            
+            const minX = containerRect.left;
+            const maxX = containerRect.right - rectWidth;
+            const minY = containerRect.top;
+            const maxY = containerRect.bottom - rectHeight;
+            
+            const boundedX = Math.max(minX, Math.min(maxX, newX));
+            const boundedY = Math.max(minY, Math.min(maxY, newY));
+            
+            // Update rectangle position
+            activeDragElement.style.position = 'absolute';
+            activeDragElement.style.left = (boundedX - containerRect.left) + 'px';
+            activeDragElement.style.top = (boundedY - containerRect.top) + 'px';
+        });
+        
+        // Mouse up - stop dragging
+        document.addEventListener('mouseup', function(e) {
+            if (isDragging && activeDragElement) {
+                // Remove visual dragging state
+                activeDragElement.classList.remove('dragging');
+                
+                // Check if we dropped rectangle3 and rectangles overlap perfectly
+                if (activeDragElement.id === 'rectangle3' && !mergeExecuted) {
+                    if (checkPerfectOverlap()) {
+                        mergeExecuted = true;
+                        mergeRectangles();
+                    }
+                }
+                
+                // Reset drag state
+                isDragging = false;
+                activeDragElement = null;
+            }
+        });
+        
+        // Touch events for mobile support
+        rectangles.forEach(rectangle => {
+            rectangle.addEventListener('touchstart', function(e) {
+                if (e.target.classList.contains('arrow-button')) return;
+                
+                activeDragElement = this;
+                isDragging = true;
+                
+                const touch = e.touches[0];
+                const rect = this.getBoundingClientRect();
+                
+                offsetX = touch.clientX - rect.left;
+                offsetY = touch.clientY - rect.top;
+                
+                startX = touch.clientX - offsetX;
+                startY = touch.clientY - offsetY;
+                
+                this.classList.add('dragging');
+                
+                e.preventDefault();
+            });
+        });
+        
+        document.addEventListener('touchmove', function(e) {
+            if (!isDragging || !activeDragElement) return;
+            
+            const touch = e.touches[0];
+            
+            const newX = touch.clientX - offsetX;
+            const newY = touch.clientY - offsetY;
+            
+            const containerRect = container.getBoundingClientRect();
+            
+            const rectWidth = activeDragElement.offsetWidth;
+            const rectHeight = activeDragElement.offsetHeight;
+            
+            const minX = containerRect.left;
+            const maxX = containerRect.right - rectWidth;
+            const minY = containerRect.top;
+            const maxY = containerRect.bottom - rectHeight;
+            
+            const boundedX = Math.max(minX, Math.min(maxX, newX));
+            const boundedY = Math.max(minY, Math.min(maxY, newY));
+            
+            activeDragElement.style.position = 'absolute';
+            activeDragElement.style.left = (boundedX - containerRect.left) + 'px';
+            activeDragElement.style.top = (boundedY - containerRect.top) + 'px';
+            
+            e.preventDefault();
+        });
+        
+        document.addEventListener('touchend', function(e) {
+            if (isDragging && activeDragElement) {
+                activeDragElement.classList.remove('dragging');
+                
+                // Check if we dropped rectangle3 and rectangles overlap perfectly
+                if (activeDragElement.id === 'rectangle3' && !mergeExecuted) {
+                    if (checkPerfectOverlap()) {
+                        mergeExecuted = true;
+                        mergeRectangles();
+                    }
+                }
+                
+                // Reset drag state
+                isDragging = false;
+                activeDragElement = null;
+            }
+        });
+        
+        // Button click event (can be expanded later)
+        const buttons = document.querySelectorAll('.arrow-button, .backslash-button');
+        
+        buttons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent rectangle click event
+                
+                // Calculate screen dimensions
+                const screenW = window.screen.width;
+                const screenH = window.screen.height;
+                const winWidth = 800; // Large width
+                const winHeight = 600; // Large height
+                const halfWidth = 400; // Half width for seed window
+                
+                if (this.classList.contains('backslash-button')) {
+                    // Open whomp.html on the left
+                    window.open('whomp/whomp.html', '_blank', 
+                        `width=${winWidth},height=${winHeight},left=0,top=${Math.floor((screenH - winHeight) / 2)},resizable=yes`);
+                } else if (this.id === 'button2') {
+                    // Open embeddings.html in the middle
+                    window.open('Embeddings/embeddings.html', '_blank', 
+                        `width=${winWidth},height=${winHeight},left=${Math.floor((screenW - winWidth) / 2)},top=${Math.floor((screenH - winHeight) / 2)},resizable=yes`);
+                } else if (this.id === 'button3') {
+                    // Open seed.html on the right with half width
+                    window.open('seed/seed.html', '_blank', 
+                        `width=${halfWidth},height=${winHeight},left=${screenW - halfWidth},top=${Math.floor((screenH - winHeight) / 2)},resizable=yes`);
+                }
+            });
+        });
+
+        // Add title click handler
+        document.querySelector('h1').addEventListener('click', function() {
+            this.style.gap = '50px';
+            const titleButton = this.querySelector('.title-button');
+            titleButton.style.display = 'flex';
+            setTimeout(() => {
+                titleButton.classList.add('visible');
+            }, 100);
+        });
+
+        // Add click handler for the title button
+        document.querySelector('.title-button').addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent title click event
+            
+            // Calculate screen dimensions
+            const screenW = window.screen.width;
+            const screenH = window.screen.height;
+            const winWidth = 400; // Narrow width
+            const winHeight = screenH; // Full height
+            const left = screenW - winWidth; // Position on far right
+            const top = 0; // Start from top
+            
+            // Open future-with-me.glitch.me
+            window.open('https://future-with-me.glitch.me/', '_blank', 
+                `width=${winWidth},height=${winHeight},left=${left},top=${top},resizable=no`);
+            
+            // Open introductions image in a popup on the left
+            const imgWidth = 600; // Width for the image popup
+            const imgHeight = 800; // Height for the image popup
+            const imgLeft = 0; // Position on far left
+            const imgTop = 0; // Position at top
+            
+            // Open introductions.jpg at the top
+            window.open('assets/introductions.jpg', '_blank',
+                `width=${imgWidth},height=${imgHeight},left=${imgLeft},top=${imgTop},resizable=yes`);
+            
+            // Open qrcode.jpg below introductions.jpg
+            const qrTop = imgHeight + 20; // Position below introductions.jpg with 20px gap
+            window.open('assets/qrcode.jpg', '_blank',
+                `width=${imgWidth},height=${imgHeight},left=${imgLeft},top=${qrTop},resizable=yes`);
+        });
+    </script>
+</body>
+</html>
