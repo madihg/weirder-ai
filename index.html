@@ -764,7 +764,7 @@
             
             // Open introductions image in a popup on the left
             const imgWidth = 600; // Width for the image popup
-            const imgHeight = 800; // Height for the image popup
+            const imgHeight = 400; // Height for the image popup
             const imgLeft = 0; // Position on far left
             const imgTop = 0; // Position at top
             
@@ -773,7 +773,7 @@
                 `width=${imgWidth},height=${imgHeight},left=${imgLeft},top=${imgTop},resizable=yes`);
             
             // Open qrcode.jpg below introductions.jpg
-            const qrTop = imgHeight + 20; // Position below introductions.jpg with 20px gap
+            const qrTop = imgHeight + 200; // Position below introductions.jpg with 20px gap
             window.open('assets/qrcode.png', '_blank',
                 `width=${imgWidth},height=${imgHeight},left=${imgLeft},top=${qrTop},resizable=yes`);
         });
