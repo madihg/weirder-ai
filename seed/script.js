@@ -76,7 +76,7 @@ block1Input.addEventListener('input', () => {
 });
 
 slashButton1.addEventListener('click', () => {
-  openUrlWindow('https://www.google.com/search?q=ai+news&rlz=1C5CHFA_enUS1097US1097&oq=ai+news+&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIGCAEQRRhB0gEIMTY4MWowajeoAgCwAgA&sourceid=chrome&ie=UTF-8', 'AI News');
+  openUrlWindow('https://www.emarketer.com/content/us-adults-fear-ai-will-erode-news-quality', 'AI News');
 });
 
 // Block 2 slider and slash buttons logic
