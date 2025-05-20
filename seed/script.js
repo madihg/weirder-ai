@@ -92,7 +92,7 @@ block2Slider.addEventListener('input', () => {
   else if (sliderPhase === 0 && slashButton2.style.display === 'inline-block' && parseInt(block2Slider.value) === 0) {
     sliderPhase = 1;
     secondSlashButton = document.createElement('button');
-    secondSlashButton.textContent = '/';
+    secondSlashButton.textContent = '|';
     secondSlashButton.className = 'slash-button';
     secondSlashButton.style.marginTop = '10px';
     document.getElementById('block2').appendChild(secondSlashButton);
