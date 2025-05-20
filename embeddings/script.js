@@ -178,15 +178,15 @@ let elementContent = {
   thirteenth: [
     { type: 'image', content: 'assets/monster-meme3.png' }
   ],
-  fourteenth: [
-    { type: 'image', content: 'assets/kristeva.jpg' }
-  ],
-  fifteenth: [
-    { type: 'image', content: 'assets/shapeshifter.png' }
-  ],
-  sixteenth: [
-    { type: 'link', content: 'https://future-v-chameleon.glitch.me/' }
-  ]
+  // fourteenth: [
+  //   { type: 'image', content: 'assets/kristeva.jpg' }
+  // ],
+  // fifteenth: [
+  //   { type: 'image', content: 'assets/shapeshifter.png' }
+  // ],
+  // sixteenth: [
+  //   { type: 'link', content: 'https://future-v-chameleon.glitch.me/' }
+  // ]
 };
 
 let connections = [
@@ -201,10 +201,10 @@ let connections = [
   ['ninth', 'tenth'],
   ['tenth', 'eleventh'],
   ['eleventh', 'twelfth'],
-  ['twelfth', 'thirteenth'],
-  ['thirteenth', 'fourteenth'],
-  ['fourteenth', 'fifteenth'],
-  ['fifteenth', 'sixteenth']
+  ['twelfth', 'thirteenth']
+  // ['thirteenth', 'fourteenth'],
+  // ['fourteenth', 'fifteenth'],
+  // ['fifteenth', 'sixteenth']
 ];
 
 // Function for second canvas
