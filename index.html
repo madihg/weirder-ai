@@ -490,7 +490,7 @@
                     const top = Math.floor((screenH - winHeight) / 2); // Center vertically
                     
                     // Open psy-grey.html in a centered window
-                    window.open('psy-grey.html', '_blank', 
+                    window.open('psy-grey/psy-grey.html', '_blank', 
                         `width=${winWidth},height=${winHeight},left=${left},top=${top},resizable=yes`);
                 });
                 
@@ -729,9 +729,9 @@
                     window.open('embeddings/embeddings.html', '_blank', 
                         `width=${winWidth},height=${winHeight},left=${Math.floor((screenW - winWidth) / 2)},top=${Math.floor((screenH - winHeight) / 2)},resizable=yes`);
                 } else if (this.id === 'button3') {
-                    // Open psy-grey.html in the middle
-                    window.open('psy-grey/psy-grey.html', '_blank', 
-                        `width=${winWidth},height=${winHeight},left=${Math.floor((screenW - winWidth) / 2)},top=${Math.floor((screenH - winHeight) / 2)},resizable=yes`);
+                    // Open seed.html on the right with half width
+                    window.open('seed/seed.html', '_blank', 
+                        `width=${halfWidth},height=${winHeight},left=${screenW - halfWidth},top=${Math.floor((screenH - winHeight) / 2)},resizable=yes`);
                 }
             });
         });
