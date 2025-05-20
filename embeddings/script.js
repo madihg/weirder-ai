@@ -217,7 +217,7 @@ function sketch2(p) {
   p.setup = function () {
     p.createCanvas(window.innerWidth, window.innerHeight, canvas2);
 
-    let vars = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth', 'fourteenth', 'fifteenth', 'sixteenth'];
+    let vars = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth'];
 
     // Calculate positions in a grid-like pattern
     let cols = 4;
